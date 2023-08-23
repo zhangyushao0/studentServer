@@ -1,9 +1,0 @@
-/home/zys/repo/java/demo2/studentSystem/target/generated-sources/protobuf/grpc-java/com/studentDemo/student/studentProto.java
-/home/zys/repo/java/demo2/studentSystem/src/main/java/com/studentDemo/server/SystemServer.java
-/home/zys/repo/java/demo2/studentSystem/src/main/java/com/studentDemo/student/Student.java
-/home/zys/repo/java/demo2/studentSystem/src/main/java/com/studentDemo/student/StudentServiceImpl.java
-/home/zys/repo/java/demo2/studentSystem/target/generated-sources/protobuf/grpc-java/com/studentDemo/student/StudentResponseOrBuilder.java
-/home/zys/repo/java/demo2/studentSystem/target/generated-sources/protobuf/grpc-java/com/studentDemo/student/StudentServiceGrpc.java
-/home/zys/repo/java/demo2/studentSystem/target/generated-sources/protobuf/grpc-java/com/studentDemo/student/StudentRequestOrBuilder.java
-/home/zys/repo/java/demo2/studentSystem/target/generated-sources/protobuf/grpc-java/com/studentDemo/student/StudentResponse.java
-/home/zys/repo/java/demo2/studentSystem/target/generated-sources/protobuf/grpc-java/com/studentDemo/student/StudentRequest.java
