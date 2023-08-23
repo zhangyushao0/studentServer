@@ -27,7 +27,7 @@ src/main/proto
 需要先使用 grpc 的编译器，例如使用终端的命令
 
 ```bash
-mvn protobuf:compile
+mvn clean compile
 ```
 
 或者 IDE 中也有图形化选项，将 student.proto 编译成 java 文件，生成的文件在
