@@ -1,5 +1,11 @@
 # 后端
 
+## 拉取
+
+```bash
+git clone https://github.com/zhangyushao0/studentServer.git --recursive
+```
+
 ## 介绍
 
 ```bash
