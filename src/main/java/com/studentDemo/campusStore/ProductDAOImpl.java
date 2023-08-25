@@ -1,40 +1,36 @@
-package com.studentDemo.user;
+package com.studentDemo.campusStore;
 
 import com.studentDemo.hibernateutil.HibernateUtil;
 import org.hibernate.Session;
 import java.util.List;
 
-public class UserDAOImpl implements UserDAO {
-    @Override
-    public User getUserById(Long id) {
+public class ProductDAOImpl {
+    public Product getProductById(Long id) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        User user = session.get(User.class, id);
-        return user;
+        Product product = session.get(Product.class, id);
+        return product;
     }
 
-    @Override
-    public List<User> getAllUsers() {
+    public List<Product> getAllProducts() {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        List<User> users = session.createQuery("FROM User", User.class).list();
-        return users;
+        List<Product> products = session.createQuery("FROM Product", Product.class).list();
+        return products;
     }
 
-    @Override
-    public void saveUser(User user) {
+    public void saveProduct(Product product) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         session.beginTransaction();
-        session.saveOrUpdate(user);
+        session.saveOrUpdate(product);
         session.getTransaction().commit();
         session.close();
     }
 
-    @Override
-    public void deleteUser(Long id) {
+    public void deleteProduct(Long id) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         session.beginTransaction();
-        User user = session.get(User.class, id);
-        if (user != null) {
-            session.delete(user);
+        Product product = session.get(Product.class, id);
+        if (product != null) {
+            session.delete(product);
         }
         session.getTransaction().commit();
         session.close();

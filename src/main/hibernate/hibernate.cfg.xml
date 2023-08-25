@@ -34,5 +34,7 @@
         <mapping class="com.studentDemo.user.Student" />
         <mapping class="com.studentDemo.bank.BankAccount" />
         <mapping class="com.studentDemo.bank.Transaction" />
+        <mapping class="com.studentDemo.campusStore.Product" />
+        <mapping class="com.studentDemo.campusStore.Comment" />
     </session-factory>
 </hibernate-configuration>

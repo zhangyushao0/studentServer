@@ -11,6 +11,9 @@ import javax.persistence.Column;
 import java.time.LocalDateTime;
 import com.studentDemo.user.User;
 
+import lombok.Data;
+
+@Data
 @Entity
 @Table(name = "transactions")
 public class Transaction {
@@ -33,54 +36,7 @@ public class Transaction {
     private BankAccount bankAccount;
 
     public Transaction() {
-        time = LocalDateTime.now().toString();
-    }
-
-    public Long getTransactionId() {
-        return transactionId;
-    }
-
-    public void setTransactionId(Long transactionId) {
-        this.transactionId = transactionId;
-    }
-
-    public String getTransactionType() {
-        return transactionType;
-    }
-
-    public void setTransactionType(String transactionType) {
-        this.transactionType = transactionType;
-    }
-
-    public Long getCounterUserId() {
-        return counterUserId;
-    }
-
-    public void setCounterUserId(Long counterUserId) {
-        this.counterUserId = counterUserId;
-    }
-
-    public Double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Double amount) {
-        this.amount = amount;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
+        LocalDateTime localDateTime = LocalDateTime.now();
+        this.time = localDateTime.toString();
     }
 }

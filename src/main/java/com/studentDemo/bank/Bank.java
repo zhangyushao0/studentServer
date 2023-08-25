@@ -12,13 +12,32 @@ public class Bank {
             transaction.setAmount(amount);
             transaction.setCounterUserId(toUser.getId());
             transaction.setTransactionType("TransferFrom");
+            transaction.setBankAccount(fromUser.getBankAccount());
             fromUser.getBankAccount().getTransactions().add(transaction);
             transaction = new Transaction();
             transaction.setAmount(amount);
             transaction.setCounterUserId(fromUser.getId());
             transaction.setTransactionType("TransferTo");
+            transaction.setBankAccount(toUser.getBankAccount());
             toUser.getBankAccount().getTransactions().add(transaction);
             UserDAOImpl userDAOImpl = new UserDAOImpl();
+            userDAOImpl.saveUser(fromUser);
+            userDAOImpl.saveUser(toUser);
+            return true;
+        }
+        return false;
+    }
+
+    // 撤销转账
+    public boolean cancelTransferMoney(User fromUser, Transaction transaction) {
+        UserDAOImpl userDAOImpl = new UserDAOImpl();
+        User toUser = userDAOImpl.getUserById(transaction.getCounterUserId());
+        boolean result = transferMoney(toUser, fromUser, transaction.getAmount());
+        if (result) {
+            transaction.setTransactionType("CancelTransfer");
+            transaction.setCounterUserId(fromUser.getId());
+            transaction.setBankAccount(fromUser.getBankAccount());
+            fromUser.getBankAccount().getTransactions().add(transaction);
             userDAOImpl.saveUser(fromUser);
             userDAOImpl.saveUser(toUser);
             return true;
