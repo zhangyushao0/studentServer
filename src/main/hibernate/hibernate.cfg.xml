@@ -5,11 +5,10 @@
     <session-factory>
         <!-- JDBC Database connection settings -->
         <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-        <!-- 以下修改 -->
         <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/MyDB</property>
         <property name="hibernate.connection.username">zys</property>
         <property name="hibernate.connection.password"></property>
-        <!-- 以上修改 -->
+
         <!-- JDBC connection pool settings -->
         <property name="hibernate.c3p0.min_size">5</property>
         <property name="hibernate.c3p0.max_size">20</property>
