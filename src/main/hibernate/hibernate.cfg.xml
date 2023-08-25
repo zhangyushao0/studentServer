@@ -32,5 +32,7 @@
         <!-- Mention annotated class or mapping xml files -->
         <mapping class="com.studentDemo.user.User" />
         <mapping class="com.studentDemo.user.Student" />
+        <mapping class="com.studentDemo.bank.BankAccount" />
+        <mapping class="com.studentDemo.bank.Transaction" />
     </session-factory>
 </hibernate-configuration>
