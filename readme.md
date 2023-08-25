@@ -47,3 +47,15 @@ src/main/java/com/studentDemo/server/SystemServer.java
 ```
 
 中，仿照已有的接口，将自己的接口添加进去。
+
+## 如何使用数据库
+
+本作品使用的是 mysql 数据库，并且使用了 hibernate 框架。依赖已经加好了。首先需要在
+
+```bash
+src/main/hibernate/hibernate.cfg.xml
+```
+
+进行配置你的数据库，配置什么已在文件里标出。后面就可以在你的代码中使用 hibernate 框架进行数据库操作了。可以模仿 user 模块中的代码进行操作。使用 Data Access Object (DAO) 模式，后续的代码中，访问数据库的操作可以仿照 src/main/java/com/studentDemo/user/UserDAOImpl.java
+
+src/main/java/com/studentDemo/student 仅作为示例，实际的 student 和其它的例如 teacher，admin 均是继承于 user。
