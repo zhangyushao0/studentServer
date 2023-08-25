@@ -13,7 +13,7 @@ public class SystemServer {
                 .addService(new StudentServiceImpl())
                 .build();
         server.start();
-        System.out.println("Server started at" + server.getPort());
+        System.out.println("Server started at " + server.getPort());
         server.awaitTermination();
     }
 }
