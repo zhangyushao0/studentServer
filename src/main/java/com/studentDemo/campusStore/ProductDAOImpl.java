@@ -35,4 +35,18 @@ public class ProductDAOImpl {
         session.getTransaction().commit();
         session.close();
     }
+
+    public List<Product> getProducts(int page) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List<Product> products = session.createQuery("FROM Product", Product.class).list();
+        int i = 0;
+        for (Product product : products) {
+            System.out.println(product);
+            i++;
+            if (i == 10) {
+                break;
+            }
+        }
+        return products;
+    }
 }

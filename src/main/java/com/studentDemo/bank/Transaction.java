@@ -28,7 +28,7 @@ public class Transaction {
     @Column(name = "amount")
     private Double amount;
     @Column(name = "time")
-    private String time;
+    private LocalDateTime time;
     @Column(name = "description")
     private String description;
     @ManyToOne // 添加多对一的关系
@@ -36,7 +36,6 @@ public class Transaction {
     private BankAccount bankAccount;
 
     public Transaction() {
-        LocalDateTime localDateTime = LocalDateTime.now();
-        this.time = localDateTime.toString();
+        this.time = LocalDateTime.now();
     }
 }

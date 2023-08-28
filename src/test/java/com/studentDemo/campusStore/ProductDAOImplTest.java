@@ -79,6 +79,9 @@ public class ProductDAOImplTest {
         Product product = new Product();
         product.setName("Test Product");
         product.setPrice(10.0);
+        product.setCategory("test");
+        product.setDescription("test");
+        product.setImageUrl("test");
         productDAO.saveProduct(product);
 
         // Get the product by its ID using Hibernate

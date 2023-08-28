@@ -3,9 +3,17 @@ package com.studentDemo.campusStore;
 import com.studentDemo.bank.Bank;
 import com.studentDemo.bank.Transaction;
 import com.studentDemo.user.User;
+import com.studentDemo.user.UserDAOImpl;
 
 public class CampusStore {
     private User storeUser;
+
+    public CampusStore() {
+        storeUser = new User();
+        storeUser.setId(2992L);
+        UserDAOImpl userDAOImpl = new UserDAOImpl();
+        storeUser = userDAOImpl.getUserById(storeUser.getId());
+    }
 
     public boolean sellProduct(Product product, User user) {
         Bank bank = new Bank();

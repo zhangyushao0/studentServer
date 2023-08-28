@@ -9,6 +9,7 @@ public class HibernateUtilTest {
 
     @Test
     public void testSessionFactory() {
+        System.out.println("testSessionFactory");
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Assertions.assertNotNull(sessionFactory);
     }

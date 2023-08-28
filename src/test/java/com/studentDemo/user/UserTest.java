@@ -17,14 +17,14 @@ public class UserTest {
     @BeforeEach
     public void setUp() {
         User user1 = new User();
-        user1.setId(10L);
+        user1.setId(5L);
         user1.setUsername("testuser1");
         user1.setPassword("testpassword1");
         BankAccount bankAccount1 = new BankAccount();
         bankAccount1.setBalance(100.0);
         user1.setBankAccount(bankAccount1);
         User user2 = new User();
-        user2.setId(11L);
+        user2.setId(6L);
         user2.setUsername("testuser2");
         user2.setPassword("testpassword2");
         BankAccount bankAccount2 = new BankAccount();
@@ -35,8 +35,15 @@ public class UserTest {
         UserDAOImpl userDAOImpl = new UserDAOImpl();
         userDAOImpl.saveUser(user1);
         userDAOImpl.saveUser(user2);
-        user = userDAOImpl.getUserById(10L);
+        user = userDAOImpl.getUserById(5L);
         transaction = user.getBankAccount().getTransactions().get(0);
+    }
+
+    @Test
+    public void testTransaction() {
+        assertEquals(50.0, transaction.getAmount());
+        assertEquals(6, transaction.getCounterUserId());
+        assertEquals("TransferFrom", transaction.getTransactionType());
     }
 
     @Test
@@ -72,6 +79,5 @@ public class UserTest {
         userDAOImpl.saveUser(user1);
         User user2 = userDAOImpl.getUserById(user1.getId());
         assertEquals(user1.getUsername(), user2.getUsername());
-
     }
 }
