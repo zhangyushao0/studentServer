@@ -3,7 +3,7 @@ package com.studentDemo.user;
 import java.util.List;
 
 public interface UserDAO {
-    User getUser(Long id);
+    User getUserById(Long id);
 
     List<User> getAllUsers();
 
