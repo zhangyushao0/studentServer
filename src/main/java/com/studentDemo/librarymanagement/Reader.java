@@ -12,6 +12,15 @@ public class Reader extends User{
         //System.out.println("3.归还图书");
         System.out.println("0.退出系统");
     }
+    public String[] getmenu()
+    {
+        String[] result=new String[4];
+        result[0]="尊敬的读者:"+this.getName()+"欢迎来到图书馆";
+        result[1]="查找图书";
+        result[2]="借阅图书";
+        result[3]="退出系统";
+        return result;
+    }
     public void Operation(int n, BookList bookList)throws OperationException {
         IOperation iOperation=null;
         switch(n){

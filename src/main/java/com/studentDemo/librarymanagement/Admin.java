@@ -4,6 +4,18 @@ public class Admin extends User{
     public Admin(String name){
         super(name);
     }
+    public String[] getmenu()
+    {
+        String[] result=new String[7];
+        result[0]="尊敬的管理员:"+this.getName()+"欢迎来到欢迎来到图书管理系统";
+        result[1]="查找图书";
+        result[2]="新增图书";
+        result[3]="删除图书";
+        result[4]="显示图书";
+        result[5]="归还图书";
+        result[6]="退出系统";
+        return result;
+    }
     public void menu(){
         System.out.println("尊敬的管理员:"+this.getName()+"欢迎来到图书管理系统");
         System.out.println("1.查找图书");

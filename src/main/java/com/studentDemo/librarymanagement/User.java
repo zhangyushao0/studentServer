@@ -2,6 +2,8 @@ package com.studentDemo.librarymanagement;
 
 public abstract class User {
     private String name;
+    //private String id;
+    private String[] menu;
     public User(String name){
         this.name=name;
     }
@@ -11,9 +13,11 @@ public abstract class User {
     public String getName(){
         return name;
     }
+
     public void setName(String name){
         this.name=name;
     }
+
     public abstract void Operation(int n, BookList bookList)throws OperationException;
 //子类的Operation会抛出异常来处理异常，父类也需要抛出异常，
 //因为父类抛出异常大小要大于子类重写方法抛出的异常
