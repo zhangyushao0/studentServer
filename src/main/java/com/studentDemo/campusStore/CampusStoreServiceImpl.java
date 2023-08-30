@@ -2,6 +2,11 @@ package com.studentDemo.campusStore;
 
 import io.grpc.stub.StreamObserver;
 import java.util.List;
+
+import com.studentDemo.bank.Transaction;
+import com.studentDemo.user.User;
+import com.studentDemo.user.UserDAOImpl;
+
 import java.util.ArrayList;
 
 public class CampusStoreServiceImpl extends CampusStoreServiceGrpc.CampusStoreServiceImplBase {
@@ -85,4 +90,79 @@ public class CampusStoreServiceImpl extends CampusStoreServiceGrpc.CampusStoreSe
                 }
         }
 
+        @Override
+        public void makeComment(makeCommentRequest request, StreamObserver<makeCommentResponse> responseObserver) {
+                System.out.println("Request received from client:\n" + request);
+                UserDAOImpl userDAO = new UserDAOImpl();
+                User user = userDAO.getUserById(request.getUserId());
+                List<Transaction> transactions = user.getBankAccount().getTransactions();
+                for (Transaction transaction : transactions) {
+                        if (transaction.getDescription().equals("buy id" + request.getProductId())) {
+                                break;
+                        } else {
+                                makeCommentResponse response = makeCommentResponse.newBuilder().setSuccess(false)
+                                                .build();
+                                responseObserver.onNext(response);
+                                responseObserver.onCompleted();
+                                return;
+                        }
+                }
+                Comment comment = new Comment();
+                comment.setUserId(request.getUserId());
+                comment.setContent(request.getContent());
+                ProductDAOImpl productDAO = new ProductDAOImpl();
+                Product product = productDAO.getProductById(request.getProductId());
+                product.getComments().add(comment);
+                makeCommentResponse response = makeCommentResponse.newBuilder().setSuccess(true).build();
+                responseObserver.onNext(response);
+                responseObserver.onCompleted();
+        }
+
+        @Override
+        public void buyProducts(buyProductsRequest request, StreamObserver<buyProductsResponse> responseObserver) {
+                System.out.println("Request received from client:\n" + request);
+                UserDAOImpl userDAO = new UserDAOImpl();
+                User user = userDAO.getUserById(request.getUserId());
+                List<Long> productIds = request.getProductIdList();
+                List<Product> products = new ArrayList<>();
+                for (Long productId : productIds) {
+                        ProductDAOImpl productDAO = new ProductDAOImpl();
+                        Product product = productDAO.getProductById(productId);
+                        products.add(product);
+                }
+                Double totalPrice = 0D;
+                for (Product product : products) {
+                        totalPrice += product.getPrice();
+                }
+                CampusStore campusStore = new CampusStore();
+                for (Product product : products) {
+                        campusStore.sellProduct(product, user);
+                }
+                buyProductsResponse response = buyProductsResponse.newBuilder().setSuccess(true).build();
+                responseObserver.onNext(response);
+        }
+
+        @Override
+        public void refundProduct(refundProductRequest request,
+                        StreamObserver<refundProductResponse> responseObserver) {
+                System.out.println("Request received from client:\n" + request);
+                UserDAOImpl userDAO = new UserDAOImpl();
+                User user = userDAO.getUserById(request.getUserId());
+                List<Transaction> transactions = user.getBankAccount().getTransactions();
+                for (Transaction transaction : transactions) {
+                        if (transaction.getDescription().equals("buy id" + request.getProductId())) {
+                                CampusStore campusStore = new CampusStore();
+                                campusStore.returnProduct(transaction, user);
+                                refundProductResponse response = refundProductResponse.newBuilder().setSuccess(true)
+                                                .build();
+                                responseObserver.onNext(response);
+                                responseObserver.onCompleted();
+                                return;
+                        }
+                }
+                refundProductResponse response = refundProductResponse.newBuilder().setSuccess(false).build();
+                responseObserver.onNext(response);
+                responseObserver.onCompleted();
+
+        }
 }

@@ -8,9 +8,9 @@ service CampusStoreService {
     rpc getProductById (getProductRequest) returns (getProductResponse);
     rpc setProduct(setProductRequest) returns (setProductResponse);
     rpc getProducts(getProductsRequest) returns (getProductsResponse);
-    rpc makeComment(makeCommentRequest) returns (makeCommentResponse);//todo
-    rpc buyProduct(buyProductRequest) returns (buyProductResponse);//todo
-    rpc rufundProduct(rufundProductRequest) returns (rufundProductResponse);//todo
+    rpc makeComment(makeCommentRequest) returns (makeCommentResponse);
+    rpc buyProducts(buyProductsRequest) returns (buyProductsResponse);
+    rpc refundProduct(refundProductRequest) returns (refundProductResponse);
 }
 
 message getProductRequest {
@@ -57,5 +57,24 @@ message makeCommentRequest {
 }
 
 message makeCommentResponse {
+    bool success = 1;
+}
+
+
+message buyProductsRequest {
+    repeated int64 productId = 1;
+    int64 userId = 2;
+}
+
+message buyProductsResponse {
+    bool success = 1;
+}
+
+message refundProductRequest {
+    int64 productId = 1;
+    int64 userId = 2;
+}
+
+message refundProductResponse {
     bool success = 1;
 }

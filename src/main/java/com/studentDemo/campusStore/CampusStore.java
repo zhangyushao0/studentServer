@@ -4,6 +4,7 @@ import com.studentDemo.bank.Bank;
 import com.studentDemo.bank.Transaction;
 import com.studentDemo.user.User;
 import com.studentDemo.user.UserDAOImpl;
+import java.util.List;
 
 public class CampusStore {
     private User storeUser;
@@ -18,6 +19,8 @@ public class CampusStore {
     public boolean sellProduct(Product product, User user) {
         Bank bank = new Bank();
         if (bank.transferMoney(user, storeUser, product.getPrice())) {
+            List<Transaction> transactions = user.getBankAccount().getTransactions();
+            transactions.get(transactions.size() - 1).setDescription("buy id" + product.getId());
             return true;
         }
         return false;
