@@ -6,10 +6,9 @@ import java.util.List;
 
 public class UserDAOImpl implements UserDAO {
     @Override
-    public User getUser(Long id) {
+    public User getUserById(Long id) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         User user = session.get(User.class, id);
-        session.close();
         return user;
     }
 
@@ -17,7 +16,6 @@ public class UserDAOImpl implements UserDAO {
     public List<User> getAllUsers() {
         Session session = HibernateUtil.getSessionFactory().openSession();
         List<User> users = session.createQuery("FROM User", User.class).list();
-        session.close();
         return users;
     }
 

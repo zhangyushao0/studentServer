@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 
 <hibernate-configuration>
     <session-factory>
         <!-- JDBC Database connection settings -->
-        <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+        <property name="hibernate.connection.driver_class">org.sqlite.JDBC</property>
         <!-- 以下修改 -->
-        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/MyDB</property>
-        <property name="hibernate.connection.username">zys</property>
-        <property name="hibernate.connection.password"></property>
+        <property name="hibernate.connection.url">jdbc:sqlite:src/main/resources/MyDB.sqlite</property>
+        <!-- <property name="hibernate.connection.username">zys</property>
+        <property name="hibernate.connection.password"></property> -->
         <!-- 以上修改 -->
         <!-- JDBC connection pool settings -->
         <property name="hibernate.c3p0.min_size">5</property>
@@ -18,7 +18,7 @@
         <property name="hibernate.c3p0.idle_test_period">3000</property>
 
         <!-- Specify dialect -->
-        <property name="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</property>
+        <property name="hibernate.dialect">org.sqlite.hibernate.dialect.SQLiteDialect</property>
 
 
         <!-- Enable Hibernate's automatic session context management -->
