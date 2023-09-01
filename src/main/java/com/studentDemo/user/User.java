@@ -2,10 +2,8 @@ package com.studentDemo.user;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
 import com.studentDemo.bank.Bank;
 import com.studentDemo.bank.BankAccount;
-
 import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
