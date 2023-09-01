@@ -2,7 +2,8 @@ package com.studentDemo.user;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
+import com.studentDemo.bank.Bank;
+import com.studentDemo.bank.BankAccount;
 import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,6 +29,18 @@ public class User {
 
     @Column(name = "password")
     private String password;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "bank_account_id")
+    private BankAccount bankAccount;
+
+    public BankAccount getBankAccount() {
+        return bankAccount;
+    }
+
+    public void setBankAccount(BankAccount bankAccount) {
+        this.bankAccount = bankAccount;
+    }
 
     public Long getId() {
         return id;

@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.studentDemo.bank";
+option java_outer_classname = "bankProto";
+
+service BankService {
+    rpc transfer(TransferRequest) returns (TransferResponse);
+    rpc cancelTransfer(CancelTransferRequest) returns (CancelTransferResponse);
+    rpc getTransactionsById(GetTransactionsByIdRequest) returns (GetTransactionsByIdResponse);
+    rpc getAllTransactions(GetAllTransactionsRequest) returns (GetAllTransactionsResponse);
+}
+
+message TransferRequest {
+    int64 fromUserId = 1;
+    string password = 2;
+    int64 toUserId = 3;
+    double amount = 4;
+    string description = 5;
+}
+
+message TransferResponse {
+    int64 transactionId = 1;
+    bool success = 2;
+}
+
+message CancelTransferRequest {
+    int64 transactionId = 1;
+    int64 fromUserId = 2;
+}
+
+message CancelTransferResponse {
+    bool success = 1;
+}
+
+
+message TransactionMessage {
+    int64 transactionId = 1;
+    string transactionType = 2;
+    int64 counterUserId = 3;
+    double amount = 4;
+    int64 timestamp = 5;
+    string description = 6;
+    string accountNumber = 7;
+}
+
+message GetTransactionsByIdRequest {
+    int64 userId = 1;
+}
+
+message GetTransactionsByIdResponse {
+    repeated TransactionMessage transactions = 1;
+}
+
+message GetAllTransactionsRequest {
+    int32 page=1;
+}
+
+message GetAllTransactionsResponse {
+    repeated TransactionMessage transactions = 1;
+}
+

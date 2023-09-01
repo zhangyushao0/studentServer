@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.studentDemo.campusStore";
+option java_outer_classname = "campusStoreProto";
+
+service CampusStoreService {
+    rpc getProductById (getProductRequest) returns (getProductResponse);
+    rpc setProduct(setProductRequest) returns (setProductResponse);
+    rpc getProducts(getProductsRequest) returns (getProductsResponse);
+    rpc makeComment(makeCommentRequest) returns (makeCommentResponse);
+    rpc buyProducts(buyProductsRequest) returns (buyProductsResponse);
+    rpc refundProduct(refundProductRequest) returns (refundProductResponse);
+}
+
+message getProductRequest {
+    int64 id = 1;
+}
+message getProductResponse {
+    ProductMessage product = 1;
+}
+message setProductRequest {
+    ProductMessage product = 1;
+}
+message setProductResponse {
+    int64 id = 1;
+}
+message ProductMessage {
+    int64 id = 1;// This field should not be set by clients if you want to add a new product.If you want to modify a product, you should set this field.
+    string name = 2;
+    double price = 3;
+    string imageUrl = 4;
+    string description = 5;
+    string category = 6;
+    repeated CommentMessage comments = 7;
+}
+
+message CommentMessage {
+    int64 id = 1;
+    string content = 2;
+    int64 userId = 3;
+}
+
+message getProductsRequest {
+    string category = 1;
+    int32 page = 2;
+}
+
+message getProductsResponse {
+    repeated ProductMessage products = 1;
+}
+
+message makeCommentRequest {
+    int64 productId = 1;
+    string content = 2;
+    int64 userId = 3;
+}
+
+message makeCommentResponse {
+    bool success = 1;
+}
+
+
+
+message buyProductsRequest {
+    repeated int64 productId = 1;
+    int64 userId = 2;
+}
+
+message buyProductsResponse {
+    bool success = 1;
+}
+
+message refundProductRequest {
+    int64 productId = 1;
+    int64 userId = 2;
+}
+
+message refundProductResponse {
+    bool success = 1;
+}

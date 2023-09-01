@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.studentDemo.student";
+option java_outer_classname = "studentProto";
+
+service StudentService {
+    rpc getStudentInfo(StudentRequest) returns (StudentResponse) {}
+}
+
+message StudentRequest {
+    string id = 1;
+}
+
+message StudentResponse {
+    string id = 1;
+    string name = 2;
+}
