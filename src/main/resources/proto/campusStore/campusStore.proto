@@ -60,6 +60,8 @@ message makeCommentResponse {
     bool success = 1;
 }
 
+
+
 message buyProductsRequest {
     repeated int64 productId = 1;
     int64 userId = 2;
