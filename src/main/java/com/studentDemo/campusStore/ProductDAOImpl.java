@@ -8,12 +8,14 @@ public class ProductDAOImpl {
     public Product getProductById(Long id) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Product product = session.get(Product.class, id);
+        session.close();
         return product;
     }
 
     public List<Product> getAllProducts() {
         Session session = HibernateUtil.getSessionFactory().openSession();
         List<Product> products = session.createQuery("FROM Product", Product.class).list();
+        session.close();
         return products;
     }
 

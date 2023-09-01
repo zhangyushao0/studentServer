@@ -37,7 +37,7 @@ public class Product {
     private String description;
     @Column(name = "category")
     private String category;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "product")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "product")
     private List<Comment> comments = new ArrayList<>();
 
 }

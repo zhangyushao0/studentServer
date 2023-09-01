@@ -31,7 +31,7 @@ public class BankAccount {
     @Column(name = "account_type")
     private String accountType;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "bankAccount")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "bankAccount")
     private List<Transaction> transactions = new ArrayList<>();
 
 }

@@ -112,6 +112,7 @@ public class CampusStoreServiceImpl extends CampusStoreServiceGrpc.CampusStoreSe
                 comment.setContent(request.getContent());
                 ProductDAOImpl productDAO = new ProductDAOImpl();
                 Product product = productDAO.getProductById(request.getProductId());
+                comment.setProduct(product);
                 product.getComments().add(comment);
                 makeCommentResponse response = makeCommentResponse.newBuilder().setSuccess(true).build();
                 responseObserver.onNext(response);

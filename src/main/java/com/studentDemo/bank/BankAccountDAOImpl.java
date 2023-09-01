@@ -6,7 +6,10 @@ import java.util.List;
 
 public class BankAccountDAOImpl {
     public BankAccount getBankAccountById(Long id) {
-        return HibernateUtil.getSessionFactory().openSession().get(BankAccount.class, id);
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        BankAccount bankAccount = session.get(BankAccount.class, id);
+        session.close();
+        return bankAccount;
     }
 
     public void saveBankAccount(BankAccount bankAccount) {
@@ -21,6 +24,8 @@ public class BankAccountDAOImpl {
         Session session = HibernateUtil.getSessionFactory().openSession();
         session.beginTransaction();
         Transaction transaction = session.get(Transaction.class, id);
+        session.getTransaction().commit();
+        session.close();
         return transaction;
     }
 
