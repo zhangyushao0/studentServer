@@ -32,9 +32,9 @@
         <!-- Mention annotated class or mapping xml files -->
         <mapping class="com.studentDemo.user.User" />
         <mapping class="com.studentDemo.user.Student" />
-        <mapping class="com.studentDemo.bank.BankAccount" />
-        <mapping class="com.studentDemo.bank.Transaction" />
-        <mapping class="com.studentDemo.campusStore.Product" />
-        <mapping class="com.studentDemo.campusStore.Comment" />
+        <mapping class="com.studentDemo.dormitory.Dormitory" />
+        <mapping class="com.studentDemo.dormitory.Repair" />
+        <mapping class="com.studentDemo.dormitory.WaterAndEle" />
+
     </session-factory>
 </hibernate-configuration>

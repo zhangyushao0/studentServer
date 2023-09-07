@@ -1,0 +1,84 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.studentDemo.dormitory";
+option java_outer_classname = "DormitoryProto";
+
+service DormitoryServer{
+  rpc getDormitoryId (getDormitoryRequest) returns (getDormitoryResponse);
+  rpc getDormitoryIdRepair (getDormitoryRequest) returns (getDormitoryResponse);
+  rpc getDormitoryIdWal (getDormitoryRequest) returns (getDormitoryResponse);
+  rpc setDormitory(setDormitoryRequest) returns (setDormitoryResponse);
+  rpc getDormitories(getDormitoriesRequest) returns (getDormitoriesResponse);
+  rpc makeRepair(makeRepairRequest) returns (makeRepairResponse);
+  rpc makeWaterAndEle(makeWaterAndEleRequest) returns (makeWaterAndEleResponse);
+}
+
+message RepairMesssage{
+    int64  reId=1;
+    string reType=2;
+    string reCampus=3;
+    string rePlace=4;
+    string rePhone=5;
+    string reDate=6;
+    string reCondition=7;
+    string reEvaluate=8;
+}
+
+message WaterAndEleMassage{
+     int64 walId=1;
+     string walDate=2;
+     int64 walNum=3;
+     string walType=4;
+
+}
+
+message DormitoryMessage{
+    int64 dorId=1;
+    string stuName=2;
+    int64 stuNum=3;
+    string dorNum=4;
+    int64 bedNum=5;
+    repeated RepairMesssage repair=6;
+    repeated WaterAndEleMassage waterAndEle=7;
+
+}
+
+message getDormitoryRequest {
+  int64 id = 1;
+}
+message getDormitoryResponse {
+  DormitoryMessage product = 1;
+}
+
+message setDormitoryRequest {
+  DormitoryMessage product = 1;
+}
+message setDormitoryResponse {
+  int64 id = 1;
+}
+
+message getDormitoriesRequest {
+  string category = 1;
+  int32 page = 2;
+}
+message getDormitoriesResponse {
+  repeated DormitoryMessage products = 1;
+}
+
+message makeRepairRequest {
+  int64 id=1;
+  RepairMesssage product=2;
+}
+message makeRepairResponse {
+ bool sucess=1;
+}
+
+message makeWaterAndEleRequest {
+   int64 id=1;
+   WaterAndEleMassage product=2;
+
+}
+message makeWaterAndEleResponse {
+  bool success = 1;
+  }
