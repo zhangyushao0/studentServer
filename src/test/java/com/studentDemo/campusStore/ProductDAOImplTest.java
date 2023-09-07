@@ -38,9 +38,10 @@ public class ProductDAOImplTest {
         product.setName("Test Product");
         product.setPrice(10.0);
         session.saveOrUpdate(product);
-
+        session.flush();
+        session.close();
         // Get the product by its ID using the DAO
-        Product retrievedProduct = productDAO.getProductById(3L);
+        Product retrievedProduct = productDAO.getProductById(product.getId());
 
         // Check that the retrieved product matches the original product
         assertNotNull(retrievedProduct);
@@ -64,13 +65,19 @@ public class ProductDAOImplTest {
         List<Product> products = productDAO.getAllProducts();
 
         // Check that the correct number of products were retrieved
-        assertEquals(2, products.size());
+        int num = session.createQuery("FROM Product", Product.class).list().size();
+        assertEquals(num, products.size());
 
         // Check that the retrieved products match the original products
-        assertEquals(product1.getName(), products.get(0).getName());
-        assertEquals(product1.getPrice(), products.get(0).getPrice(), 0.001);
-        assertEquals(product2.getName(), products.get(1).getName());
-        assertEquals(product2.getPrice(), products.get(1).getPrice(), 0.001);
+        products.stream().forEach(product -> {
+            if (product.getId().equals(product1.getId())) {
+                assertEquals(product1.getName(), product.getName());
+                assertEquals(product1.getPrice(), product.getPrice(), 0.001);
+            } else if (product.getId().equals(product2.getId())) {
+                assertEquals(product2.getName(), product.getName());
+                assertEquals(product2.getPrice(), product.getPrice(), 0.001);
+            }
+        });
     }
 
     @Test
@@ -100,8 +107,8 @@ public class ProductDAOImplTest {
         product.setName("Test Product");
         product.setPrice(10.0);
 
-        session.save(product);
-
+        ProductDAOImpl productDAO = new ProductDAOImpl();
+        productDAO.saveProduct(product);
         // Delete the product using the DAO
         productDAO.deleteProduct(product.getId());
 

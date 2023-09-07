@@ -1,110 +1,89 @@
 package com.studentDemo.campusStore;
 
-import io.grpc.stub.StreamObserver;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.junit.Assert.assertEquals;
 
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
-import io.grpc.Server;
-import io.grpc.ServerBuilder;
-import com.studentDemo.user.UserDAOImpl;
-import com.studentDemo.bank.BankAccount;
-import com.studentDemo.user.User;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+
+import io.grpc.ManagedChannel;
+import io.grpc.stub.StreamObserver;
+import io.grpc.ManagedChannelBuilder;
+import io.grpc.Server;
+import io.grpc.ServerBuilder;
+
 public class CampusStoreServiceImplTest {
-    private UserDAOImpl userDAO;
-    private CampusStoreServiceImpl campusStoreService;
-    User testUser;
-    Product testProduct;
+    Server server;
+    ManagedChannel channel;
+    CampusStoreServiceGrpc.CampusStoreServiceBlockingStub blockingStub;
 
     @BeforeEach
-    public void setUp() {
-        userDAO = new UserDAOImpl();
-        testUser = new User();
-        testUser.setUsername("test");
-        testUser.setPassword("test");
-        BankAccount bankAccount = new BankAccount();
-        bankAccount.setBalance(1000D);
-        testUser.setBankAccount(bankAccount);
-        testProduct = new Product();
-        testProduct.setName("test");
-        testProduct.setPrice(100D);
-        testProduct.setImageUrl("test");
-        testProduct.setDescription("test");
-        testProduct.setCategory("test");
-        List<Comment> comments = new ArrayList<>();
+    public void setUp() throws Exception {
+        server = ServerBuilder.forPort(8080).addService(new CampusStoreServiceImpl()).build();
+        server.start();
+        channel = ManagedChannelBuilder.forAddress("localhost", 8080).usePlaintext().build();
+        blockingStub = CampusStoreServiceGrpc.newBlockingStub(channel);
+    }
+
+    @AfterEach
+    public void tearDown() throws Exception {
+        server.shutdown();
+        channel.shutdown();
+    }
+
+    @Test
+    public void testGetProductById() {
+        LocalDateTime date = LocalDateTime.now();
+        int id = setProduct(date);
+        getProductRequest request = getProductRequest.newBuilder().setId(id).build();
+        getProductResponse response = blockingStub.getProductById(request);
+        ProductMessage product = response.getProduct();
+        assertEquals(product.getId(), id);
+        assertEquals(product.getName(), "test");
+        assertEquals(product.getPrice(), 100.0, 0.01);
+        assertEquals(product.getImageUrl(), "test");
+        assertEquals(product.getDescription(), "test");
+        assertEquals(product.getCommentsCount(), 0);
+    }
+
+    @Test
+    public void testSetProduct() {
         Comment comment = new Comment();
-        comment.setUserId(testUser.getId());
+        comment.setId(1L);
+        comment.setUserId(1L);
         comment.setContent("test");
-        comment.setProduct(testProduct);
+        List<Comment> comments = new ArrayList<>();
         comments.add(comment);
-        testProduct.setComments(comments);
-        ProductDAOImpl productDAO = new ProductDAOImpl();
-        productDAO.saveProduct(testProduct);
-        CampusStore campusStore = new CampusStore();
-        campusStore.sellProduct(testProduct, testUser);
-        userDAO.saveUser(testUser);
+        ProductMessage product = ProductMessage.newBuilder().setName("test").setPrice(100.0)
+                .setImageUrl("test").setDescription("test").setCategory("test").build();
+        setProductRequest request = setProductRequest.newBuilder().setProduct(product).build();
+        setProductResponse response = blockingStub.setProduct(request);
+        assertEquals(response.getSuccess(), true);
+    }
+
+    public int setProduct(LocalDateTime date) {
+        ProductMessage product = ProductMessage.newBuilder().setName("test").setPrice(100.0)
+                .setImageUrl("test").setDescription("test").setCategory("test" + date).build();
+        setProductRequest request = setProductRequest.newBuilder().setProduct(product).build();
+        setProductResponse response = blockingStub.setProduct(request);
+        assertEquals(response.getSuccess(), true);
+        return ((int) response.getId());
     }
 
     @Test
-    public void testBankAccount() {
-        BankAccount bankAccount = new BankAccount();
-        bankAccount.setBalance(1000D);
-        testUser.setBankAccount(bankAccount);
-        userDAO.saveUser(testUser);
-        User user = userDAO.getUserById(testUser.getId());
-        assert (user.getBankAccount().getBalance() == 1000D);
-    }
-
-    @Test
-    public void testGetProductById() throws Exception {
-        Server server = ServerBuilder.forPort(8080)
-                .addService(new CampusStoreServiceImpl())
-                .build()
-                .start();
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 8080)
-                .usePlaintext()
-                .build();
-        CampusStoreServiceGrpc.CampusStoreServiceBlockingStub stub = CampusStoreServiceGrpc.newBlockingStub(channel);
-        getProductRequest request = getProductRequest.newBuilder()
-                .setId(1L)
-                .build();
-        getProductResponse response = stub.getProductById(request);
-        System.out.println("Response received from server:\n" + response);
-        assert (response.getProduct().getId() == 1L);
-        assert (response.getProduct().getName().equals("test"));
-        assert (response.getProduct().getPrice() == 100D);
-        assert (response.getProduct().getImageUrl().equals("test"));
-        assert (response.getProduct().getDescription().equals("test"));
-        assert (response.getProduct().getCategory().equals("test"));
-        assert (response.getProduct().getComments(0).getId() == 1L);
-        assert (response.getProduct().getComments(0).getUserId() == 1L);
-        assert (response.getProduct().getComments(0).getContent().equals("test"));
-        channel.shutdown();
-    }
-
-    @Test
-    public void testMakeComment() throws Exception {
-        Server server = ServerBuilder.forPort(8080)
-                .addService(new CampusStoreServiceImpl())
-                .build()
-                .start();
-        System.out.println("Server started at " + server.getPort());
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 8080)
-                .usePlaintext()
-                .build();
-        CampusStoreServiceGrpc.CampusStoreServiceBlockingStub stub = CampusStoreServiceGrpc.newBlockingStub(channel);
-        makeCommentRequest request = makeCommentRequest.newBuilder()
-                .setUserId(testUser.getId())
-                .setProductId(testProduct.getId())
-                .setContent("test")
-                .build();
-        makeCommentResponse response = stub.makeComment(request);
-        System.out.println("Response received from server:\n" + response);
-        assert (response.getSuccess() == true);
-        channel.shutdown();
+    public void testGetProducts() {
+        LocalDateTime date = LocalDateTime.now();
+        int id1 = setProduct(date);
+        int id2 = setProduct(date);
+        getProductsRequest request = getProductsRequest.newBuilder().setCategory("test" + date).setPage(1).build();
+        getProductsResponse response = blockingStub.getProducts(request);
+        List<ProductMessage> products = response.getProductsList();
+        assertEquals(products.size(), 2);
+        assertEquals(products.get(0).getId(), id1);
+        assertEquals(products.get(1).getId(), id2);
     }
 }

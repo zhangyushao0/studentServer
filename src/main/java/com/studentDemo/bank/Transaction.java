@@ -23,6 +23,8 @@ public class Transaction {
     private Long transactionId;
     @Column(name = "transaction_type")
     private String transactionType;
+    @Column(name = "counter_transaction_id")
+    private Long counterTransactionId;
     @Column(name = "counter_user_id")
     private Long counterUserId;
     @Column(name = "amount")

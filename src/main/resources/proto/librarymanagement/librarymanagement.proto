@@ -5,16 +5,19 @@ option java_package = "com.studentDemo.librarymanagement";
 option java_outer_classname = "librarymanagementProto";
 
 service LibraryService {
-    rpc loginto(idRequest) returns (idResponse) {}
+    rpc loginto(logintoIdRequest) returns (logintoIdResponse);
 }
 
-message idRequest {
+message logintoIdRequest {//登陆时判断身份
     string id = 1;
     string name = 2;
 }
 
-message idResponse {
-    /*string id = 1;
-    string name = 2;*/
-    string identity = 3;
+message logintoIdResponse {//登陆时返回身份和消息
+    string identity = 1;
+    string introductionHead = 2;
+    string introductionBody = 3;
+    repeated string reBooksName=4;
+    repeated string reBooksAuthor=5;
+    repeated string profile=6;
 }

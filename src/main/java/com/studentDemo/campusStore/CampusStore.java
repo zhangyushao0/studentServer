@@ -22,7 +22,18 @@ public class CampusStore {
 
     public boolean returnProduct(Transaction transaction, User user) {
         User storeUser = new UserDAOImpl().getUserById(storeUserId);
-        return new Bank().cancelTransferMoney(storeUser, transaction);
+        Transaction storeTransaction = null;
+        for (Transaction transaction1 : storeUser.getBankAccount().getTransactions()) {
+            if (transaction1.getCounterTransactionId().equals(transaction.getTransactionId())) {
+                storeTransaction = transaction1;
+                break;
+            }
+        }
+        if (storeTransaction == null) {
+            return false;
+        }
+        Bank bank = new Bank();
+        return bank.cancelTransferMoney(user, storeUser, transaction, storeTransaction);
     }
 
     public boolean commentProduct(Product product, User user, String content) {

@@ -38,16 +38,20 @@ public class ProductDAOImpl {
         session.close();
     }
 
-    public List<Product> getProducts(int page) {
+    public List<Product> getProducts(String category, int page) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        List<Product> products = session.createQuery("FROM Product", Product.class).list();
-        int i = 0;
-        for (Product product : products) {
-            System.out.println(product);
-            i++;
-            if (i == 10) {
-                break;
-            }
+        List<Product> products;
+        if (!category.equals("all")) {
+            products = session.createQuery("FROM Product WHERE category = :category", Product.class)
+                    .setParameter("category", category)
+                    .setFirstResult((page - 1) * 10)
+                    .setMaxResults(10)
+                    .list();
+        } else {
+            products = session.createQuery("FROM Product", Product.class)
+                    .setFirstResult((page - 1) * 10)
+                    .setMaxResults(10)
+                    .list();
         }
         return products;
     }

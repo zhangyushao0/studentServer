@@ -13,7 +13,7 @@ public class BankServiceImpl extends BankServiceGrpc.BankServiceImplBase {
         Double amount = request.getAmount();
         UserDAOImpl userDAOImpl = new UserDAOImpl();
         User fromUser = userDAOImpl.getUserById(fromUserId);
-        if (fromUser.getBankAccount().getPassword() != request.getPassword()) {
+        if (!fromUser.getBankAccount().getPassword().equals(request.getPassword())) {
             TransferResponse response = TransferResponse.newBuilder().setSuccess(false).build();
             responseObserver.onNext(response);
             responseObserver.onCompleted();
@@ -25,7 +25,8 @@ public class BankServiceImpl extends BankServiceGrpc.BankServiceImplBase {
         TransferResponse response = TransferResponse.newBuilder()
                 .setTransactionId(fromUser.getBankAccount().getTransactions()
                         .get(fromUser.getBankAccount().getTransactions().size() - 1).getTransactionId())
-                .setSuccess(result).build();
+                .setSuccess(result)
+                .build();
         responseObserver.onNext(response);
         responseObserver.onCompleted();
     }
@@ -36,10 +37,24 @@ public class BankServiceImpl extends BankServiceGrpc.BankServiceImplBase {
         Long fromUserId = request.getFromUserId();
         UserDAOImpl userDAOImpl = new UserDAOImpl();
         User fromUser = userDAOImpl.getUserById(fromUserId);
-        BankAccountDAOImpl bankAccountDAOImpl = new BankAccountDAOImpl();
-        Transaction transaction = bankAccountDAOImpl.getTransactionById(transactionId);
+        Transaction transactionFrom = null;
+        for (Transaction t : fromUser.getBankAccount().getTransactions()) {
+            if (t.getTransactionId().equals(transactionId)) {
+                transactionFrom = t;
+                break;
+            }
+        }
+        Long toUserId = transactionFrom.getCounterUserId();
+        User toUser = userDAOImpl.getUserById(toUserId);
+        Transaction transactionTo = null;
+        for (Transaction t : toUser.getBankAccount().getTransactions()) {
+            if (t.getCounterTransactionId().equals(transactionId)) {
+                transactionTo = t;
+                break;
+            }
+        }
         Bank bank = new Bank();
-        boolean result = bank.cancelTransferMoney(fromUser, transaction);
+        boolean result = bank.cancelTransferMoney(fromUser, toUser, transactionFrom, transactionTo);
         CancelTransferResponse response = CancelTransferResponse.newBuilder().setSuccess(result).build();
         responseObserver.onNext(response);
         responseObserver.onCompleted();

@@ -6,6 +6,8 @@ import com.studentDemo.student.StudentServiceImpl;
 import com.studentDemo.user.Student;
 import com.studentDemo.hibernateutil.HibernateUtil;
 import org.hibernate.Session;
+
+import com.studentDemo.bank.BankServiceImpl;
 import com.studentDemo.campusStore.CampusStoreServiceImpl;
 
 public class SystemServer {
@@ -13,6 +15,7 @@ public class SystemServer {
         Server server = ServerBuilder.forPort(8080)
                 .addService(new StudentServiceImpl())
                 .addService(new CampusStoreServiceImpl())
+                .addService(new BankServiceImpl())
                 .build();
         server.start();
         System.out.println("Server started at " + server.getPort());

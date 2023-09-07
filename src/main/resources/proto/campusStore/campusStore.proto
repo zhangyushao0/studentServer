@@ -18,12 +18,14 @@ message getProductRequest {
 }
 message getProductResponse {
     ProductMessage product = 1;
+    bool success = 2;
 }
 message setProductRequest {
     ProductMessage product = 1;
 }
 message setProductResponse {
     int64 id = 1;
+    bool success = 2;
 }
 message ProductMessage {
     int64 id = 1;// This field should not be set by clients if you want to add a new product.If you want to modify a product, you should set this field.

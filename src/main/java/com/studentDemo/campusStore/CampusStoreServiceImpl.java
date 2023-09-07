@@ -66,7 +66,8 @@ public class CampusStoreServiceImpl extends CampusStoreServiceGrpc.CampusStoreSe
                 product.setCategory(request.getProduct().getCategory());
                 ProductDAOImpl productDAO = new ProductDAOImpl();
                 productDAO.saveProduct(product);
-                setProductResponse response = setProductResponse.newBuilder().setId(product.getId()).build();
+                setProductResponse response = setProductResponse.newBuilder().setId(product.getId()).setSuccess(true)
+                                .build();
                 responseObserver.onNext(response);
                 responseObserver.onCompleted();
         }
@@ -75,7 +76,7 @@ public class CampusStoreServiceImpl extends CampusStoreServiceGrpc.CampusStoreSe
         public void getProducts(getProductsRequest request, StreamObserver<getProductsResponse> responseObserver) {
                 System.out.println("Request received from client:\n" + request);
                 ProductDAOImpl productDAO = new ProductDAOImpl();
-                List<Product> products = productDAO.getProducts(request.getPage());
+                List<Product> products = productDAO.getProducts(request.getCategory(), request.getPage());
                 List<ProductMessage> productMessages = new ArrayList<>();
                 for (Product product : products) {
                         ProductMessage productMessage = ProductMessage.newBuilder()
@@ -88,6 +89,8 @@ public class CampusStoreServiceImpl extends CampusStoreServiceGrpc.CampusStoreSe
                                         .build();
                         productMessages.add(productMessage);
                 }
+                responseObserver.onNext(getProductsResponse.newBuilder().addAllProducts(productMessages).build());
+                responseObserver.onCompleted();
         }
 
         @Override
