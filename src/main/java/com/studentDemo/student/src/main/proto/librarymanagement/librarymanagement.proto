@@ -1,0 +1,165 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.studentDemo.librarymanagement";
+option java_outer_classname = "librarymanagementProto";
+
+service LibraryService {
+    rpc loginto(IdRequest) returns (IdResponse) {}//接口1：输入学生id，完成身份判断，完成
+    rpc checkBooksByName(CheckBookNameRequest) returns (CheckBooksNameResponse){}//提供书名，返回所有关键词相关的搜索结果,完成
+    rpc checkBooksByIsbn(CheckBookIsbnRequest) returns (CheckBooksIsbnResponse){}//提供ISBN号，返回一个搜索结果,完成
+    rpc checkBooksByAuthor(CheckBookAuthorRequest) returns (CheckBookAuthorResponse){}//提供作者名，返回所有的搜索结果，完成
+    rpc checkBooksDetail(CheckBooksDetailRequest) returns (CheckBooksDetailResponse){}//根据提供的isbn书籍名称，返回所有书籍细节，完成
+    rpc bookBorrowService(BorrowRequest) returns (BorrowReponse){}//根据书籍bcode、借阅者姓名、借阅者id执行借阅功能，返回成功（1）/失败（0），完成
+    rpc bookReturnService(ReturnRequest) returns (ReturnResponse){}//根据书籍的bcode编码号归还书籍,返回成功（1）/失败（0）,完成
+    rpc checkReaderBorrowed(CheckBorrowedRequest) returns (CheckBurrowedResponse){}//根据学生id查看所有已借书籍,完成
+    rpc addNewBook(AddBookRequest) returns (AddBookResponse){}//根据书籍详情添加新书到图书馆，返回成功（1）/失败（0）,完成
+    rpc deleteBook(DeleteBookRequest) returns (DeleteBookResponse){}//根据书籍的bcode删除图书,返回成功（1）/失败（0）,完成
+    rpc checkBookBorrowed(CheckBookBorrowedRequest) returns (CheckBookBorrowedReponse){}//根据书籍bcode码查看改书籍的借阅情况，返回书籍的详细属性,完成
+    rpc alterIntroduction(AlterIntroRequest) returns (AlterIntroResponse){}//修改当前图书馆介绍，图书馆介绍始终只有一条，不能增减。重新返回图书馆内容，完成
+    rpc alterInformation(AlterInforRequest) returns (AlterInferResponse){}//新增或修改一条公告，输入公告内容，重新返回所有公告,完成
+    rpc deleteInformation(DeleteInfoRequest) returns(DeleteInfoResponse){}//根据公告的标题删除指定公告，重新返回所有公告，完成
+    rpc alterRecom(AlterRecomRequest) returns (AlterRecomResponse){}//更新一本推荐书目的全部属性，重新返回所有推荐书目。推荐书目始终有六本，不可增多或减少，完成
+}
+message AlterRecomResponse{
+  repeated RecommendationInfo recomList=1;
+}
+message AlterRecomRequest{
+  RecommendationInfo recom=1;
+}
+message DeleteInfoResponse{
+  repeated InformationInfo infoList=1;
+}
+message DeleteInfoRequest{
+  string infoHead=1;
+}
+message AlterInferResponse{
+  repeated InformationInfo infoList=1;
+}
+message AlterInforRequest{
+  InformationInfo infor=1;
+}
+message AlterIntroRequest{
+  IntroductionInfo intro=1;
+}
+message AlterIntroResponse{
+  IntroductionInfo intro=1;
+}
+message CheckBookBorrowedReponse{
+  DBooksDetailInfo dBooksDetailInfo=1;
+}
+message CheckBookBorrowedRequest{
+  string bcode=1;
+}
+message DeleteBookRequest{
+  string bcode=1;
+}
+message DeleteBookResponse{
+  bool deleteresult=1;
+}
+message AddBookResponse{
+  bool addresult=1;
+}
+message AddBookRequest{
+  DBooksInfo dbooks=1;
+  DBooksDetailInfo dBooksdetail=2;
+}
+message CheckBurrowedResponse{
+  repeated DBooksDetailInfo dBooksDetailInfo=1;
+}
+message CheckBorrowedRequest{
+  string readerid=1;
+}
+message ReturnRequest{
+  string bcode=1;
+}
+message ReturnResponse{
+  bool returnresult=1;
+}
+message BorrowRequest{
+  string bcode=1;
+  string readername=2;
+  string readerid=3;
+}
+message BorrowReponse{
+  bool borrowresult=1;
+}
+message CheckBooksDetailRequest{
+  string isbn=1;
+}
+message CheckBooksDetailResponse{
+  repeated DBooksDetailInfo dBooksDetailInfo=1;
+}
+message DBooksDetailInfo{
+  string bcode=1;
+  string isbn=2;
+  string callnum=3;
+  string location=4;
+  bool  isborrowed=5;
+  string readername=6;
+  string readerid=7;
+  string due=8;
+  string bookname=9;
+}
+message CheckBookNameRequest{
+  string bookname=1;
+}
+message CheckBookIsbnRequest{
+  string isbn=1;
+}
+message CheckBookAuthorRequest{
+  string author=1;
+}
+message CheckBooksNameResponse{
+  repeated DBooksInfo dbooks=1;
+}
+message  CheckBooksIsbnResponse{
+  DBooksInfo dbook=1;
+}
+message CheckBookAuthorResponse{
+  repeated DBooksInfo dbooks=1;
+}
+message IntroductionInfo{
+    string introductionHead = 1;
+    string introductionBody = 2;
+    string introductionYear =3;
+    string introductionMonth=4;
+    string introductionDay=5;
+}
+message InformationInfo{
+    string informationHead = 1;
+    string informationBody = 2;
+    string informationYear =3;
+    string informationMonth=4;
+    string informationDay=5;
+}
+message RecommendationInfo
+{
+    int32 reBooknum=1;
+    string reBooksName=2;
+    string reBooksAuthor=3;
+    string profile=4;
+}
+message DBooksInfo{
+     string isbn=1;
+     string bookname=2;
+     string author=3;
+     int32 price=4;
+     string subject=5;
+     int32 stock=6;
+     string publisher=7;
+     string genre=8;
+     string brief=9;
+}
+message IdRequest {//登陆时判断身份
+    string id = 1;
+    string name = 2;
+}
+
+message IdResponse {//登陆时返回身份和消息
+    string identity = 1;
+    repeated InformationInfo infor=2;
+    IntroductionInfo intro=3;
+    repeated RecommendationInfo recom=4;
+}
+
